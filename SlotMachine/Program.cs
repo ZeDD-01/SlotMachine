@@ -11,6 +11,12 @@ class SlotMachine
         const int maxSymbolValue = 4;
         const int payoutPerLine = 1;
         
+        const int middleHorizontalLine = 1;
+        const int allHorizontalLine = 2;
+        const int allVerticalLine = 3;
+        const int diagonalsTwoLines = 4;
+        const int allLines = 5;
+        
         int[,] grid = new int[numberOfRows, numberOfColumns];
         Random rnd = new Random();
         
@@ -18,11 +24,11 @@ class SlotMachine
         int bet = int.Parse(Console.ReadLine());
         
         Console.Write("Which lines do you want to play?\n");
-        Console.WriteLine("1 - Middle horizontal line");
-        Console.WriteLine("2 - All horizontal lines");
-        Console.WriteLine("3 - All vertical lines");
-        Console.WriteLine("4 - Diagonals (2 line)");
-        Console.WriteLine("5 - All line (8 lines in total)");
+        Console.WriteLine(middleHorizontalLine);
+        Console.WriteLine(allHorizontalLine);
+        Console.WriteLine(allVerticalLine);
+        Console.WriteLine(diagonalsTwoLines);
+        Console.WriteLine(allLines);
         Console.Write("Your choice: ");
         int lineChoice = int.Parse(Console.ReadLine());
 
