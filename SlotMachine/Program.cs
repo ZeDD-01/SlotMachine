@@ -11,11 +11,11 @@ class SlotMachine
         const int maxSymbolValue = 4;
         const int payoutPerLine = 1;
         
-        const int middleHorizontalLine = 1;
-        const int allHorizontalLine = 2;
-        const int allVerticalLine = 3;
-        const int diagonalsTwoLines = 4;
-        const int allLines = 5;
+        const string middleHorizontalLine = "1 - Middle Horizontal Line";
+        const string allHorizontalLine = "2 - All Horizontal Lines";
+        const string allVerticalLine = "3 - All Vertical Lines";
+        const string diagonalsTwoLines = "4 - Diagonal (2 Lines)";
+        const string allLines = "5 - All Lines";
         
         int[,] grid = new int[numberOfRows, numberOfColumns];
         Random rnd = new Random();
@@ -30,16 +30,16 @@ class SlotMachine
         Console.WriteLine(diagonalsTwoLines);
         Console.WriteLine(allLines);
         Console.Write("Your choice: ");
-        int lineChoice = int.Parse(Console.ReadLine());
+        string lineChoice = Console.ReadLine();
 
         // Start the Slot Machine
         for (int row = 0; row <numberOfRows ; row++)
         {
             for (int col = 0; col < numberOfColumns; col++)
             {
-                grid[row, col] = rnd.Next(minSymbolValue, maxSymbolValue +1); 
+                //grid[row, col] = rnd.Next(minSymbolValue, maxSymbolValue +1); 
                 //With this line below you can test what happens if the user wins.
-                //grid[row, col] = 1; 
+                grid[row, col] = 1; 
             }
         }
         
@@ -55,14 +55,14 @@ class SlotMachine
 
         int profit = 0;
 
-        if (lineChoice == 1 || lineChoice == 5)
+        if (lineChoice == "1" || lineChoice == "5")
         {
             if (grid[1, 0] == grid[1, 1] && grid[1, 1] == grid[1, 2])
             {
                 profit += payoutPerLine;
             }
         }
-        if (lineChoice == 2 || lineChoice == 5)
+        if (lineChoice == "2" || lineChoice == "5")
         {
             for (int row = 0; row < numberOfRows; row++)
             {
@@ -73,7 +73,7 @@ class SlotMachine
             }
         }
 
-        if (lineChoice == 3 || lineChoice == 5)
+        if (lineChoice == "3" || lineChoice == "5")
         {
             for (int col = 0; col < numberOfColumns; col++)
             {
@@ -84,7 +84,7 @@ class SlotMachine
             }
         }
         
-        if (lineChoice == 4 || lineChoice == 5)
+        if (lineChoice == "4" || lineChoice == "5")
         {
            
             if (grid[0, 0] == grid[1, 1] && grid[1, 1] == grid[2, 2])
