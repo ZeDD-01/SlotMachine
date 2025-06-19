@@ -1,49 +1,70 @@
 ﻿using System;
-using System.Diagnostics;
 
 class SlotMachine
 {
+    const int minSymbolValue = 1;
+    const int maxSymbolValue = 4;
+    const int payoutPerLine = 1;
+
+    const int MODE_MIDDLE_HORIZONTAL = 1;
+    const int MODE_ALL_HORIZONTALS = 2;
+    const int MODE_ALL_VERTICALS = 3;
+    const int MODE_DIAGONALS = 4;
+    const int MODE_ALL = 5;
+
     static void Main()
     {
-        const int numberOfRows = 3;
-        const int numberOfColumns = 3;
-        const int minSymbolValue = 1;
-        const int maxSymbolValue = 4;
-        const int payoutPerLine = 1;
-        
-        const string middleHorizontalLine = "1 - Middle Horizontal Line";
-        const string allHorizontalLine = "2 - All Horizontal Lines";
-        const string allVerticalLine = "3 - All Vertical Lines";
-        const string diagonalsTwoLines = "4 - Diagonal (2 Lines)";
-        const string allLines = "5 - All Lines";
-        
-        int[,] grid = new int[numberOfRows, numberOfColumns];
         Random rnd = new Random();
-        
-        Console.Write("Please place your bet ");
-        int bet = int.Parse(Console.ReadLine());
-        
-        Console.Write("Which lines do you want to play?\n");
-        Console.WriteLine(middleHorizontalLine);
-        Console.WriteLine(allHorizontalLine);
-        Console.WriteLine(allVerticalLine);
-        Console.WriteLine(diagonalsTwoLines);
-        Console.WriteLine(allLines);
-        Console.Write("Your choice: ");
-        string lineChoice = Console.ReadLine();
 
-        // Start the Slot Machine
-        for (int row = 0; row <numberOfRows ; row++)
+        // User defined grid size
+        Console.Write("How many rows do you want? ");
+        int numberOfRows = int.Parse(Console.ReadLine());
+
+        Console.Write("How many columns do you want? ");
+        int numberOfColumns = int.Parse(Console.ReadLine());
+
+        int[,] grid = new int[numberOfRows, numberOfColumns];
+
+        Console.Write("Please place your bet: ");
+        int bet = int.Parse(Console.ReadLine());
+
+        Console.WriteLine("\nWhich lines do you want to play?");
+        Console.WriteLine($"{MODE_MIDDLE_HORIZONTAL} - Middle Horizontal Line");
+        Console.WriteLine($"{MODE_ALL_HORIZONTALS} - All Horizontal Lines");
+        Console.WriteLine($"{MODE_ALL_VERTICALS} - All Vertical Lines");
+        Console.WriteLine($"{MODE_DIAGONALS} - Diagonal (2 Lines)");
+        Console.WriteLine($"{MODE_ALL} - All Lines");
+        Console.Write("Your choice: ");
+        int lineChoice = int.Parse(Console.ReadLine());
+
+        Console.WriteLine("\nYou selected:");
+        if (lineChoice == MODE_MIDDLE_HORIZONTAL)
+            Console.WriteLine("▶ Middle Horizontal Line");
+        else if (lineChoice == MODE_ALL_HORIZONTALS)
+            Console.WriteLine("▶ All Horizontal Lines");
+        else if (lineChoice == MODE_ALL_VERTICALS)
+            Console.WriteLine("▶ All Vertical Lines");
+        else if (lineChoice == MODE_DIAGONALS)
+            Console.WriteLine("▶ Diagonal (2 Lines)");
+        else if (lineChoice == MODE_ALL)
+            Console.WriteLine("▶ All Lines");
+        else
+        {
+            Console.WriteLine("Invalid choice. Defaulting to Middle Horizontal Line.");
+            lineChoice = MODE_MIDDLE_HORIZONTAL;
+        }
+
+        // fill grid
+        for (int row = 0; row < numberOfRows; row++)
         {
             for (int col = 0; col < numberOfColumns; col++)
             {
-                //grid[row, col] = rnd.Next(minSymbolValue, maxSymbolValue +1); 
-                //With this line below you can test what happens if the user wins.
-                grid[row, col] = 1; 
+                grid[row, col] = rnd.Next(minSymbolValue, maxSymbolValue + 1);
             }
         }
-        
-        Console.WriteLine("Slot Machine Result:");
+
+        // show grid
+        Console.WriteLine("\nSlot Machine Result:");
         for (int row = 0; row < numberOfRows; row++)
         {
             for (int col = 0; col < numberOfColumns; col++)
@@ -55,57 +76,96 @@ class SlotMachine
 
         int profit = 0;
 
-        if (lineChoice == "1" || lineChoice == "5")
+        // Middle Horizontal Line
+        if (lineChoice == MODE_MIDDLE_HORIZONTAL || lineChoice == MODE_ALL)
         {
-            if (grid[1, 0] == grid[1, 1] && grid[1, 1] == grid[1, 2])
+            int row = numberOfRows / 2;
+            int first = grid[row, 0];
+            bool allEqual = true;
+            for (int col = 1; col < numberOfColumns; col++)
             {
-                profit += payoutPerLine;
+                if (grid[row, col] != first)
+                {
+                    allEqual = false;
+                    break;
+                }
             }
+            if (allEqual) profit += payoutPerLine;
         }
-        if (lineChoice == "2" || lineChoice == "5")
+
+        // All Horizontal Lines
+        if (lineChoice == MODE_ALL_HORIZONTALS || lineChoice == MODE_ALL)
         {
             for (int row = 0; row < numberOfRows; row++)
             {
-                if (grid[row, 0] == grid[row, 1] && grid[row, 1] == grid[row, 2])
+                int first = grid[row, 0];
+                bool allEqual = true;
+                for (int col = 1; col < numberOfColumns; col++)
                 {
-                    profit += payoutPerLine;
+                    if (grid[row, col] != first)
+                    {
+                        allEqual = false;
+                        break;
+                    }
                 }
+                if (allEqual) profit += payoutPerLine;
             }
         }
 
-        if (lineChoice == "3" || lineChoice == "5")
+        // All Vertical Lines
+        if (lineChoice == MODE_ALL_VERTICALS || lineChoice == MODE_ALL)
         {
             for (int col = 0; col < numberOfColumns; col++)
             {
-                if (grid[0, col] == grid[1, col] && grid[1, col] == grid[2, col])
+                int first = grid[0, col];
+                bool allEqual = true;
+                for (int row = 1; row < numberOfRows; row++)
                 {
-                    profit += payoutPerLine;
+                    if (grid[row, col] != first)
+                    {
+                        allEqual = false;
+                        break;
+                    }
                 }
+                if (allEqual) profit += payoutPerLine;
             }
         }
-        
-        if (lineChoice == "4" || lineChoice == "5")
-        {
-           
-            if (grid[0, 0] == grid[1, 1] && grid[1, 1] == grid[2, 2])
-            {
-                profit += payoutPerLine;
-            }
 
-            
-            if (grid[0, 2] == grid[1, 1] && grid[1, 1] == grid[2, 0])
+        // Diagonals
+        if (lineChoice == MODE_DIAGONALS || lineChoice == MODE_ALL)
+        {
+            // Primary Diagonal (\)
+            if (numberOfRows == numberOfColumns)
             {
-                profit += payoutPerLine;
+                int first = grid[0, 0];
+                bool allEqual = true;
+                for (int i = 1; i < numberOfRows; i++)
+                {
+                    if (grid[i, i] != first)
+                    {
+                        allEqual = false;
+                        break;
+                    }
+                }
+                if (allEqual) profit += payoutPerLine;
+
+                // Secondary Diagonal (/)
+                first = grid[0, numberOfColumns - 1];
+                allEqual = true;
+                for (int i = 1; i < numberOfRows; i++)
+                {
+                    if (grid[i, numberOfColumns - 1 - i] != first)
+                    {
+                        allEqual = false;
+                        break;
+                    }
+                }
+                if (allEqual) profit += payoutPerLine;
             }
         }
-        
-        int amountOfMoney = bet;
 
-        if (profit > 0)
-        {
-            amountOfMoney += profit;
-        }
-        
+        int amountOfMoney = bet + profit;
+
         Console.WriteLine("\nProfit: " + profit);
         Console.WriteLine("Amount of Money: $" + amountOfMoney);
     }
