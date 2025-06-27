@@ -18,15 +18,27 @@ class SlotMachine
 
         // User defined grid size
         Console.Write("How many rows do you want? ");
-        int numberOfRows = int.Parse(Console.ReadLine());
+        if (!int.TryParse(Console.ReadLine(), out int numberOfRows) || numberOfRows < 1)
+        {
+            Console.WriteLine("Invalid input for number of rows. Exiting.");
+            return;
+        }
 
         Console.Write("How many columns do you want? ");
-        int numberOfColumns = int.Parse(Console.ReadLine());
+        if (!int.TryParse(Console.ReadLine(), out int numberOfColumns) || numberOfColumns < 1)
+        {
+            Console.WriteLine("Invalid input for number of columns. Exiting.");
+            return;
+        }
 
         int[,] grid = new int[numberOfRows, numberOfColumns];
 
         Console.Write("Please place your bet: ");
-        int bet = int.Parse(Console.ReadLine());
+        if (!int.TryParse(Console.ReadLine(), out int bet) || bet < 1)
+        {
+            Console.WriteLine("Invalid bet amount. Exiting.");
+            return;
+        }
 
         Console.WriteLine("\nWhich lines do you want to play?");
         Console.WriteLine($"{MODE_MIDDLE_HORIZONTAL} - Middle Horizontal Line");
@@ -35,7 +47,11 @@ class SlotMachine
         Console.WriteLine($"{MODE_DIAGONALS} - Diagonal (2 Lines)");
         Console.WriteLine($"{MODE_ALL} - All Lines");
         Console.Write("Your choice: ");
-        int lineChoice = int.Parse(Console.ReadLine());
+        if (!int.TryParse(Console.ReadLine(), out int lineChoice))
+        {
+            Console.WriteLine("Invalid choice. Defaulting to Middle Horizontal Line.");
+            lineChoice = MODE_MIDDLE_HORIZONTAL;
+        }
 
         Console.WriteLine("\nYou selected:");
         if (lineChoice == MODE_MIDDLE_HORIZONTAL)
